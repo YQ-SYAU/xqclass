@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_fragments::head(~{::title})">
+    <meta charset="UTF-8">
+    <title>搜索课程</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/nav.css">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+</head>
+<body>
+<!--导航-->
+<nav th:replace="_fragments::nav(-1,${subjects},${#httpServletRequest.session.getAttribute('user')},${query})" class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <a  class="navbar-brand logo mb-0 h1" href="#">IT自学网</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="nav navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a th:href="@{/}" class="nav-link" href="#">首页</a>
+            </li>
+            <li  class="nav-item">
+                <a class="nav-link" href="#">JAVA</a>
+            </li>
+            <li class="nav-item">
+                <a  class="nav-link" href="#">归档</a>
+            </li>
+        </ul>
+        <div  class="nav-right">
+            <div class="search">
+                <form  method="post" action="/search" class="form-inline ">
+                    <input name="query" class="form-control mr-sm-2" type="search" placeholder="课程名称" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+                </form>
+            </div>
+            <div class="login">
+                <ul th:switch="${#bools.isTrue(user)}" class="nav navbar-nav ">
+                    <li th:case="false"  class="dropdown ">
+                        <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            登录
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownLogin">
+                            <a class="dropdown-item" href="/loginByQQ">QQ登录</a>
+                        </div>
+                    </li>
+                    <li th:case="true" class="dropdown ">
+                        <a href="#" role="button" id="dropdownImg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${user.avatar}" src="../static/images/-200.jpeg" alt="用户头像" class="uImage">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownImg">
+                            <a th:href="@{/user/info/find}" class="dropdown-item" href="#">个人中心</a>
+                            <a th:href="@{/logout}" class="dropdown-item" href="#">退出</a>
+                            <a th:if="${user.flag==1}" th:href="@{/admin/index/findAllBanner}" class="dropdown-item" href="#">后台管理</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <div class="container mt-3">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h4 class="text-success">搜索结果</h4>
+            </div>
+            <div class="col-sm-6 text-right">
+                共 <span class="h3 text-success" th:text="${page.totalElements}"></span> 个视频
+            </div>
+        </div>
+
+        <!--课程展示-->
+        <div class="clearfix">
+            <ul class="list-unstyled course">
+                <li th:each="course:${page.content}" class="float-left ">
+                    <div class="course-top">
+                        <a th:href="@{/course/info/}+${course.id}"  href="#">
+                            <img th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${course.cover}" src="../static/images/lz3.jpg" class="img-thumbnail" alt="...">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="course-body text-secondary">
+                        <div>
+                            <header th:text="${course.name}">标题萨达萨达萨达</header>
+                            <p class="mb-0">
+                                <i class="fa fa-clock-o text-info" aria-hidden="true"></i> <span th:text="${#dates.format(course.createTime,'yyyy-MM-dd HH:mm')}">2020-8-30</span>
+                                <span class="float-right text-muted">[[${course.skim}]]人学习</span>
+                            </p>
+                            <div>
+                                <a  href="#" class="text-secondary">
+                                    <i class="fa fa-user " aria-hidden="true"></i>&nbsp;&nbsp;<span th:text="${course.user.nickname}">是多少</span>
+                                </a>
+                                <span th:text="${course.twoSubject.name}" class="float-right">JAVA</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!--/*-->
+                <li class="float-left ">
+                    <div class="course-top">
+                        <a href="#">
+                            <img src="../static/images/lz3.jpg" class="img-thumbnail" alt="...">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="course-body text-secondary">
+                        <div>
+                            <header>标题萨达萨达萨达</header>
+                            <p class="mb-0">
+                                <i class="fa fa-clock-o text-info" aria-hidden="true"></i> <span class="">2020-8-30</span>
+                                <span class="float-right text-muted">1000 人学习</span>
+                            </p>
+                            <div>
+                                <a href="#" class="text-secondary">
+                                    <i class="fa fa-user " aria-hidden="true"></i>&nbsp;&nbsp;是多少
+                                </a>
+                                <span CLASS="float-right">JAVA</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+                <li class="float-left ">
+                    <div class="course-top">
+                        <a href="#">
+                            <img src="../static/images/lz3.jpg" class="img-thumbnail" alt="...">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="course-body text-secondary">
+                        <div>
+                            <header>标题萨达萨达萨达</header>
+                            <p class="mb-0">
+                                <i class="fa fa-clock-o text-info" aria-hidden="true"></i> <span class="">2020-8-30</span>
+                                <span class="float-right text-muted">1000 人学习</span>
+                            </p>
+                            <div>
+                                <a href="#" class="text-secondary">
+                                    <i class="fa fa-user " aria-hidden="true"></i>&nbsp;&nbsp;是多少
+                                </a>
+                                <span CLASS="float-right">JAVA</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+                <li class="float-left ">
+                    <div class="course-top">
+                        <a href="#">
+                            <img src="../static/images/lz3.jpg" class="img-thumbnail" alt="...">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="course-body text-secondary">
+                        <div>
+                            <header>标题萨达萨达萨达</header>
+                            <p class="mb-0">
+                                <i class="fa fa-clock-o text-info" aria-hidden="true"></i> <span class="">2020-8-30</span>
+                                <span class="float-right text-muted">1000 人学习</span>
+                            </p>
+                            <div>
+                                <a href="#" class="text-secondary">
+                                    <i class="fa fa-user " aria-hidden="true"></i>&nbsp;&nbsp;是多少
+                                </a>
+                                <span CLASS="float-right">JAVA</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+                <li class="float-left ">
+                    <div class="course-top">
+                        <a href="#">
+                            <img src="../static/images/lz3.jpg" class="img-thumbnail" alt="...">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="course-body text-secondary">
+                        <div>
+                            <header>标题萨达萨达萨达</header>
+                            <p class="mb-0">
+                                <i class="fa fa-clock-o text-info" aria-hidden="true"></i> <span class="">2020-8-30</span>
+                                <span class="float-right text-muted">1000 人学习</span>
+                            </p>
+                            <div>
+                                <a href="#" class="text-secondary">
+                                    <i class="fa fa-user " aria-hidden="true"></i>&nbsp;&nbsp;是多少
+                                </a>
+                                <span CLASS="float-right">JAVA</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+                <li class="float-left ">
+                    <div class="course-top">
+                        <a href="#">
+                            <img src="../static/images/lz3.jpg" class="img-thumbnail" alt="...">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="course-body text-secondary">
+                        <div>
+                            <header>标题萨达萨达萨达</header>
+                            <p class="mb-0">
+                                <i class="fa fa-clock-o text-info" aria-hidden="true"></i> <span class="">2020-8-30</span>
+                                <span class="float-right text-muted">1000 人学习</span>
+                            </p>
+                            <div>
+                                <a href="#" class="text-secondary">
+                                    <i class="fa fa-user " aria-hidden="true"></i>&nbsp;&nbsp;是多少
+                                </a>
+                                <span CLASS="float-right">JAVA</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+                <li class="float-left ">
+                    <div class="course-top">
+                        <a href="#">
+                            <img src="../static/images/lz3.jpg" class="img-thumbnail" alt="...">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="course-body text-secondary">
+                        <div>
+                            <header>标题萨达萨达萨达</header>
+                            <p class="mb-0">
+                                <i class="fa fa-clock-o text-info" aria-hidden="true"></i> <span class="">2020-8-30</span>
+                                <span class="float-right text-muted">1000 人学习</span>
+                            </p>
+                            <div>
+                                <a href="#" class="text-secondary">
+                                    <i class="fa fa-user " aria-hidden="true"></i>&nbsp;&nbsp;是多少
+                                </a>
+                                <span CLASS="float-right">JAVA</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+                <li class="float-left ">
+                    <div class="course-top">
+                        <a href="#">
+                            <img src="../static/images/lz3.jpg" class="img-thumbnail" alt="...">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="course-body text-secondary">
+                        <div>
+                            <header>标题萨达萨达萨达</header>
+                            <p class="mb-0">
+                                <i class="fa fa-clock-o text-info" aria-hidden="true"></i> <span class="">2020-8-30</span>
+                                <span class="float-right text-muted">1000 人学习</span>
+                            </p>
+                            <div>
+                                <a href="#" class="text-secondary">
+                                    <i class="fa fa-user " aria-hidden="true"></i>&nbsp;&nbsp;是多少
+                                </a>
+                                <span CLASS="float-right">JAVA</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+                <!--*/-->
+            </ul>
+        </div>
+
+        <!--分页-->
+        <div class="">
+            <nav aria-label="..." >
+                <ul class="pagination  justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</body>
+<!--/*/<th:block th:replace="_fragments::script">/*/-->
+<script src="../static/js/jquery.min.js"></script>
+<script src="../static/js/bootstrap.bundle.min.js"></script>
+<!--/*/</th:block>/*/-->
+</html>

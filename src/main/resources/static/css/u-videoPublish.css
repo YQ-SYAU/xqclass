@@ -1,0 +1,12 @@
+
+
+/*设置大纲*/
+.chapter {
+    border: 1px solid #ccc;
+    padding: 10px 14px;
+}
+.video {
+    border: 1px solid #ccc;
+    padding: 5px 14px;
+    margin-left: 50px;
+}

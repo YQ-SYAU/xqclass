@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>课程详情</title>
+    <link  th:href="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/plugins/videojs/video-js.css'" rel="stylesheet" href="../static/plugins/videojs/video-js.css">
+    <link  th:href="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/css/bootstrap.min.css'" rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link  th:href="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/css/nav.css'" rel="stylesheet" href="../static/css/nav.css">
+    <link  th:href="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/css/courseInfo.css'" rel="stylesheet" href="../static/css/courseInfo.css">
+    <link  th:href="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/css/font-awesome.min.css'" rel="stylesheet" href="../static/css/font-awesome.min.css">
+    <link  th:href="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/dist/css/adminlte.min.css'" rel="stylesheet" href="../static/dist/css/adminlte.min.css">
+    <!--引入icon-->
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+<body id="body">
+<!--导航-->
+<nav th:replace="_fragments::nav(-1,${subjects},${#httpServletRequest.session.getAttribute('user')},null)" class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <a  class="navbar-brand logo mb-0 h1" href="#">IT自学网</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="nav navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a th:href="@{/}" class="nav-link" href="#">首页</a>
+            </li>
+            <li  th:each="oneSubject:${indexDto.subjects}" class="nav-item">
+                <a th:href="@{/subject/}+${oneSubject.id}" th:text="${oneSubject.name}" class="nav-link" href="#">JAVA</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/archive}" class="nav-link" href="#">归档</a>
+            </li>
+        </ul>
+        <div  class="nav-right">
+            <div class="search">
+                <form  method="post" action="/search" class="form-inline ">
+                    <input name="query" class="form-control mr-sm-2" type="search" placeholder="课程名称" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+                </form>
+            </div>
+            <div class="login">
+                <ul th:switch="${#bools.isTrue(user)}" class="nav navbar-nav ">
+                    <li th:case="false"  class="dropdown ">
+                        <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            登录
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownLogin">
+                            <a class="dropdown-item" href="/loginByQQ">QQ登录</a>
+                        </div>
+                    </li>
+                    <li th:case="true" class="dropdown ">
+                        <a href="#" role="button" id="dropdownImg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${user.avatar}" src="../static/images/-200.jpeg" alt="用户头像" class="uImage">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownImg">
+                            <a th:href="@{/user/info/find}" class="dropdown-item" href="#">个人中心</a>
+                            <a th:href="@{/logout}" class="dropdown-item" href="#">退出</a>
+                            <a th:if="${user.flag==1}" th:href="@{/admin/index/findAllBanner}" class="dropdown-item" href="#">后台管理</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <div class="container text-center mt-3">
+        <!--视频区域-->
+        <h5 id="courseName" th:text="${courseDto.name}">课程名称</h5>
+        <div class="video-box clearfix">
+            <!--width="960" height="540"-->
+            <video id=example-video width="960" height="540" class="video-js vjs-default-skin vjs-big-play-centered" controls th:poster="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${courseDto.cover}" data-setup="{}">
+                <source th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${courseDto.chapters[0].videos[0].url}" type="application/x-mpegURL">
+            </video>
+            <div class="video-nav">
+                <ul class="list-unstyled">
+                    <li class="mulu nav-li">
+                        <!--图标-->
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                        <p>目录</p>
+                        <div class="mulu-box">
+                            <h6>目录</h6>
+                            <div th:each="chapter:${courseDto.chapters}" class="chapter">
+                                <span th:text="${chapter.name}">第一章 动态规划</span>
+                                <ul class="list-unstyled">
+                                    <li th:each="video:${chapter.videos}">
+                                        <a onclick="playVideo(this)" th:data-url="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${video.url}" th:text="${video.name}" href="javascript:void(0);">1.1 入门</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="collect_btn" class="nav-li"  >
+                        <span th:switch="${collect}" th:fragment="collect">
+                            <span th:case="true">
+                                <i class="fa fa-heart text-danger" aria-hidden="true"></i>
+                                <p>已收藏</p>
+                            </span>
+                            <span th:case="false">
+                                <i  class="fa fa-heart-o" aria-hidden="true"></i>
+                                <p>收藏</p>
+                            </span>
+                        </span>
+                    </li>
+                    <li class="nav-li" id="light">
+                        <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
+                        <p>关灯</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--视频支持-->
+        <div class="row support mt-3 text-left">
+            <div  id="like_btn" class="col-2 offset-3" style="width: 24px;height: 24px" title="点赞">
+                <a th:fragment="like"   class="text-secondary" style="cursor: pointer">
+                    <span th:switch="${like}">
+                        <i th:case="true" class="fa fa-thumbs-o-up text-primary" aria-hidden="true"></i>
+                        <i th:case="false" class="fa fa-thumbs-o-up " aria-hidden="true"></i>
+                    </span>
+                    <span id="likeNumber" th:text="${courseDto.like}">55555</span>
+                </a>
+            </div>
+            <!--弹出支付二维码-->
+            <div class="col-2 ">
+                <!-- Button trigger modal -->
+
+                <a  class="btn btn-block btn-sm text-success pay rounded-pill"  data-toggle="modal" data-target="#moneyModal" title="打赏作者">
+                    打赏作者
+                </a>
+
+                <!-- 弹出作者二维码 -->
+                <div class="modal fade" id="moneyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">请使用微信二维码扫描</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img  th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${courseDto.userDto.code}"  src="images/skm.jpg" alt="" style="width: 270px;height: 370px">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 offset-1 text-left text-secondary"  title="浏览量">
+                <i class="fa fa-eye text-" aria-hidden="true"></i>
+                <span th:text="${courseDto.skim}">55</span>
+            </div>
+        </div>
+
+        <!--视频信息-->
+        <div class="row mt-3 p-3" style="border-top: 1px solid #ffc107">
+
+            <div class="col-md-3" >
+                <!--课程介绍-->
+                <div class="c-info">
+                    <h6 class="text-info">课程详情</h6>
+                    <div class="time-box">
+                        <span class="text-muted" >[[${#dates.format(courseDto.createTime,'yyyy-MM-dd HH:mm')}]],共[[${courseDto.totalTime}]]课时</span>
+                    </div>
+                    <small class="text-muted " th:text="${courseDto.introduction}">随着Web前端工程师的需求越来越多，Web前端人员也大幅增长，企业对工程师的要求也逐步提高，对工程师的经验要求非常严格，新手Web前端工程师没有经验很难拿到高工资。那么我们这个课程，就是通过商业项目进行开发，让新手Web前端工程师能够掌握商业开发中的技巧及细节。</small>
+                </div>
+                <!--作者相关-->
+                <div id="attention">
+                    <div th:fragment="auth">
+                        <!--作者介绍-->
+                        <div  class="media mt-3" >
+                            <a target="_blank" th:href="@{/findOther/}+${courseDto.userDto.id}" href="#"><img th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${courseDto.userDto.avatar}" src="../static/images/-200.jpeg" style="width: 60px;height: 60px" class="rounded-circle align-self-start mr-3" alt="作者头像"></a>
+                            <div class="media-body">
+                                <a class="text-dark" target="_blank" th:href="@{/findOther/}+${courseDto.userDto.id}" href="#"><h6 class="mt-0 text-left" th:text="${courseDto.userDto.nickname}">测试</h6></a>
+                                <p class="text-muted mb-0  text-left" >粉丝&nbsp;&nbsp;
+                                    <span th:text="${courseDto.userDto.fans}">0</span>
+                                </p>
+                                <p class="text-muted mr-0  text-left">原创&nbsp;&nbsp;
+                                    <span th:text="${courseDto.userDto.productions}">0</span>
+                                </p>
+                            </div>
+                        </div>
+                        <!--互动-->
+                        <div  class="interaction">
+                            <div th:switch="${attention}">
+                                <button th:case="true" id="attention_btn"  class="btn btn-block btn-outline-primary btn-sm " >取消关注</button>
+                                <button th:case="false" id="attention_btn"  class="btn btn-block btn-outline-danger btn-sm " >关注</button>
+                            </div>
+                            <!--私信-->
+                            <!--/*-->
+                            <a  class="btn btn-block btn-outline-info btn-sm text-info" data-toggle="modal" data-target="#sixing" data-whatever="@mdo">私信</a>
+                            <div class="modal fade" id="sixing" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="sixingTitle">New message</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                                    <input type="text" class="form-control"  readonly  id="recipient-name">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Message:</label>
+                                                    <textarea class="form-control" id="message-text"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Send message</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--*/-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--右侧导航条-->
+            <div class="col-md-8 offset-1">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="#tab1" class="nav-link active" data-toggle="tab">课程评论
+                            <!--/*-->
+                            <span class="badge badge-info">444444</span>
+                            <!--*/-->
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tab2" class="nav-link" data-toggle="tab" >课程目录</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tab3" class="nav-link" data-toggle="tab">课程资料</a>
+                    </li>
+                </ul>
+                <!--table区域-->
+                <div class="tab-content mt-1">
+                    <!--评论区域-->
+                    <!--课程id,只能放在 th:fragment="commentList外面，不然解析不了"-->
+                    <input type="hidden" name="course.id" th:value="${courseDto.id}">
+                    <input type="hidden" name="parentComment.id" value="-1">
+                    <div   th:fragment="commentList" class="tab-pane fade show active" id="tab1">
+                        <!--评论主体-->
+                        <div class="comment-body" id="comment-body">
+                            <!--<textarea name="msg" id="" cols="100" rows="5" >-->
+                            <!--</textarea>-->
+                            <div  class="row c-content text-left text-secondary" name="content" contenteditable="true">
+
+                            </div>
+
+                            <button id="btn-sub-comment" type="button" class="btn btn-info" >发表评论</button>
+                        </div>
+                        <!--表情-->
+                        <div class="comment-emoji">
+                            <buttoon id="face">
+                                <i class="fa fa-smile-o" aria-hidden="true">表情</i>
+                            </buttoon>
+                            <!--存放表情-->
+                            <div class="emoji-box disabled">
+                                <div class="emoji-title">
+                                    <span>小黄脸</span>
+                                </div>
+                                <!--表情列表-->
+                                <div class="emoji-wrap">
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[口罩]" data-pid="1" data-id="1906"><img th:src="@{/images/smile/face1.png}" src="../static/images/images/smile/face1.png" style="width: 24px;height: 24px" title="[口罩]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[鸡腿]" data-pid="1" data-id="1905"><img th:src="@{/images/smile/face2.png}" src="../static/images/smile/face2.png" style="width: 24px;height: 24px" title="[鸡腿]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[微笑]" data-pid="1" data-id="1"><img th:src="@{/images/smile/face3.png}" src="../static/images/images/smile/face3.png" style="width: 24px;height: 24px" title="[微笑]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[笑]" data-pid="1" data-id="1958"><img th:src="@{/images/smile/face4.png}" src="../static/images/images/smile/face4.png" style="width: 24px;height: 24px" title="[笑]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[呲牙]" data-pid="1" data-id="1902"><img th:src="@{/images/smile/face5.png}" src="../static/images/images/smile/face5.png" style="width: 24px;height: 24px" title="[呲牙]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[OK]" data-pid="1" data-id="1950"><img th:src="@{/images/smile/face6.png}" src="../static/images/images/smile/face6.png" style="width: 24px;height: 24px" title="[OK]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[星星眼]" data-pid="1" data-id="1956"><img th:src="@{/images/smile/face7.png}" src="../static/images/images/smile/face7.png" style="width: 24px;height: 24px" title="[星星眼]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[哦呼]" data-pid="1" data-id="1940"><img th:src="@{/images/smile/face8.png}" src="../static/images/images/smile/face8.png" style="width: 24px;height: 24px" title="[哦呼]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[嫌弃]" data-pid="1" data-id="2"><img th:src="@{/images/smile/face9.png}" src="../static/images/images/smile/face9.png" style="width: 24px;height: 24px" title="[嫌弃]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[喜欢]" data-pid="1" data-id="3"><img th:src="@{/images/smile/face10.png}" src="../static/images/images/smile/face10.png" style="width: 24px;height: 24px" title="[喜欢]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[酸了]" data-pid="1" data-id="1273"><img th:src="@{/images/smile/face11.png}" src="../static/images/images/smile/face11.png" style="width: 24px;height: 24px" title="[酸了]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[大哭]" data-pid="1" data-id="5"><img th:src="@{/images/smile/face12.png}" src="../static/images/images/smile/face12.png" style="width: 24px;height: 24px" title="[大哭]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[害羞]" data-pid="1" data-id="6"><img th:src="@{/images/smile/face13.png}" src="../static/images/images/smile/face13.png" style="width: 24px;height: 24px" title="[害羞]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[无语]" data-pid="1" data-id="7"><img th:src="@{/images/smile/face14.png}" src="../static/images/images/smile/face14.png" style="width: 24px;height: 24px" title="[无语]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[疑惑]" data-pid="1" data-id="1938"><img th:src="@{/images/smile/face15.png}" src="../static/images/images/smile/face15.png" style="width: 24px;height: 24px" title="[疑惑]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[调皮]" data-pid="1" data-id="1128"><img th:src="@{/images/smile/face16.png}" src="../static/images/images/smile/face16.png" style="width: 24px;height: 24px" title="[调皮]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[喜极而泣]" data-pid="1" data-id="791"><img th:src="@{/images/smile/face17.png}" src="../static/images/images/smile/face17.png" style="width: 24px;height: 24px" title="[喜极而泣]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[奸笑]" data-pid="1" data-id="11"><img th:src="@{/images/smile/face18.png}" src="../static/images/images/smile/face18.png" style="width: 24px;height: 24px" title="[奸笑]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[偷笑]" data-pid="1" data-id="833"><img th:src="@{/images/smile/face19.png}" src="../static/images/images/smile/face19.png" style="width: 24px;height: 24px" title="[偷笑]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[大笑]" data-pid="1" data-id="12"><img th:src="@{/images/smile/face20.png}" src="../static/images/images/smile/face20.png" style="width: 24px;height: 24px" title="[大笑]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[阴险]" data-pid="1" data-id="23"><img th:src="@{/images/smile/face21.png}" src="../static/images/images/smile/face21.png" style="width: 24px;height: 24px" title="[阴险]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[捂脸]" data-pid="1" data-id="15"><img th:src="@{/images/smile/face22.png}" src="../static/images/images/smile/face22.png" style="width: 24px;height: 24px" title="[捂脸]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[囧]" data-pid="1" data-id="14"><img th:src="@{/images/smile/face23.png}" src="../static/images/images/smile/face23.png" style="width: 24px;height: 24px" title="[囧]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[呆]" data-pid="1" data-id="4"><img th:src="@{/images/smile/face24.png}" src="../static/images/images/smile/face24.png" style="width: 24px;height: 24px" title="[呆]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[抠鼻]" data-pid="1" data-id="18"><img th:src="@{/images/smile/face25.png}" src="../static/images/images/smile/face25.png" style="width: 24px;height: 24px" title="[抠鼻]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[惊喜]" data-pid="1" data-id="19"><img th:src="@{/images/smile/face26.png}" src="../static/images/images/smile/face26.png" style="width: 24px;height: 24px" title="[惊喜]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[惊讶]" data-pid="1" data-id="13"><img th:src="@{/images/smile/face27.png}" src="../static/images/images/smile/face27.png" style="width: 24px;height: 24px" title="[惊讶]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[笑哭]" data-pid="1" data-id="509"><img th:src="@{/images/smile/face28.png}" src="../static/images/images/smile/face28.png" style="width: 24px;height: 24px" title="[笑哭]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[妙啊]" data-pid="1" data-id="435"><img th:src="@{/images/smile/face29.png}" src="../static/images/images/smile/face29.png" style="width: 24px;height: 24px" title="[妙啊]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[doge]" data-pid="1" data-id="26"><img th:src="@{/images/smile/face30.png}" src="../static/images/images/smile/face30.png" style="width: 24px;height: 24px" title="[doge]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[滑稽]" data-pid="1" data-id="27"><img th:src="@{/images/smile/face30.png}" src="../static/images/images/smile/face31.png" style="width: 24px;height: 24px" title="[滑稽]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[吃瓜]" data-pid="1" data-id="415"><img th:src="@{/images/smile/face32.png}" src="../static/images/images/smile/face32.png" style="width: 24px;height: 24px" title="[吃瓜]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[打call]" data-pid="1" data-id="510"><img th:src="@{/images/smile/face33.png}" src="../static/images/images/smile/face33.png" style="width: 24px;height: 24px" title="[打call]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[点赞]" data-pid="1" data-id="25"><img th:src="@{/images/smile/face34.png}" src="../static/images/images/smile/face34.png" style="width: 24px;height: 24px" title="[点赞]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[鼓掌]" data-pid="1" data-id="1964"><img th:src="@{/images/smile/face35.png}" src="../static/images/images/smile/face35.png" style="width: 24px;height: 24px" title="[鼓掌]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[尴尬]" data-pid="1" data-id="9"><img th:src="@{/images/smile/face36.png}" src="../static/images/images/smile/face36.png" style="width: 24px;height: 24px" title="[尴尬]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[冷]" data-pid="1" data-id="1450"><img th:src="@{/images/smile/face37.png}" src="../static/images/images/smile/face37.png" style="width: 24px;height: 24px" title="[冷]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[灵魂出窍]" data-pid="1" data-id="16"><img th:src="@{/images/smile/face38.png}" src="../static/images/images/smile/face38.png" style="width: 24px;height: 24px" title="[灵魂出窍]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[委屈]" data-pid="1" data-id="8"><img th:src="@{/images/smile/face39.png}" src="../static/images/images/smile/face39.png" style="width: 24px;height: 24px" title="[委屈]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[傲娇]" data-pid="1" data-id="20"><img th:src="@{/images/smile/face40.png}" src="../static/images/images/smile/face40.png" style="width: 24px;height: 24px" title="[傲娇]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[疼]" data-pid="1" data-id="21"><img th:src="@{/images/smile/face41.png}" src="../static/images/images/smile/face41.png" style="width: 24px;height: 24px" title="[疼]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[吓]" data-pid="1" data-id="22"><img th:src="@{/images/smile/face42.png}" src="../static/images/images/smile/face42.png" style="width: 24px;height: 24px" title="[吓]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[生病]" data-pid="1" data-id="29"><img th:src="@{/images/smile/face43.png}" src="../static/images/images/smile/face43.png" style="width: 24px;height: 24px" title="[生病]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[吐]" data-pid="1" data-id="17"><img th:src="@{/images/smile/face44.png}" src="../static/images/images/smile/face44.png" style="width: 24px;height: 24px" title="[吐]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[嘘声]" data-pid="1" data-id="31"><img th:src="@{/images/smile/face45.png}" src="../static/images/images/smile/face45.png" style="width: 24px;height: 24px" title="[嘘声]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[捂眼]" data-pid="1" data-id="1939"><img th:src="@{/images/smile/face46.png}" src="../static/images/images/smile/face46.png" style="width: 24px;height: 24px" title="[捂眼]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[思考]" data-pid="1" data-id="1941"><img th:src="@{/images/smile/face47.png}" src="../static/images/images/smile/face47.png" style="width: 24px;height: 24px" title="[思考]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[再见]" data-pid="1" data-id="1942"><img th:src="@{/images/smile/face48.png}" src="../static/images/images/smile/face48.png" style="width: 24px;height: 24px" title="[再见]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[翻白眼]" data-pid="1" data-id="1943"><img th:src="@{/images/smile/face49.png}" src="../static/images/images/smile/face49.png" style="width: 24px;height: 24px" title="[翻白眼]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[哈欠]" data-pid="1" data-id="1951"><img th:src="@{/images/smile/face50.png}" src="../static/images/images/smile/face50.png" style="width: 24px;height: 24px" title="[哈欠]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[奋斗]" data-pid="1" data-id="1952"><img th:src="@{/images/smile/face51.png}" src="../static/images/images/smile/face51.png" style="width: 24px;height: 24px" title="[奋斗]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[墨镜]" data-pid="1" data-id="1953"><img th:src="@{/images/smile/face52.png}" src="../static/images/images/smile/face52.png" style="width: 24px;height: 24px" title="[墨镜]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[撇嘴]" data-pid="1" data-id="1955"><img th:src="@{/images/smile/face53.png}" src="../static/images/images/smile/face53.png" style="width: 24px;height: 24px" title="[撇嘴]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[难过]" data-pid="1" data-id="1954"><img th:src="@{/images/smile/face54.png}" src="../static/images/images/smile/face54.png" style="width: 24px;height: 24px" title="[难过]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[抓狂]" data-pid="1" data-id="1957"><img th:src="@{/images/smile/face55.png}" src="../static/images/images/smile/face55.png" style="width: 24px;height: 24px" title="[抓狂]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[生气]" data-pid="1" data-id="10"><img th:src="@{/images/smile/face56.png}" src="../static/images/images/smile/face56.png" style="width: 24px;height: 24px" title="[生气]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small __web-inspector-hide-shortcut__" data-emoji-text="[干杯]" data-pid="1" data-id="1949"><img th:src="@{/images/smile/face57.png}" src="../static/images/images/smile/face57.png" style="width: 24px;height: 24px" title="[干杯]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[锦鲤]" data-pid="1" data-id="1866"><img th:src="@{/images/smile/face58.png}" src="../static/images/images/smile/face58.png" style="width: 24px;height: 24px" title="[锦鲤]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[加油]" data-pid="1" data-id="1947"><img th:src="@{/images/smile/face59.png}" src="../static/images/images/smile/face59.png" style="width: 24px;height: 24px" title="[加油]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[保佑]" data-pid="1" data-id="1903"><img th:src="@{/images/smile/face60.png}" src="../static/images/images/smile/face60.png" style="width: 24px;height: 24px" title="[保佑]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[抱拳]" data-pid="1" data-id="1904"><img th:src="@{/images/smile/face61.png}" src="../static/images/images/smile/face61.png" style="width: 24px;height: 24px" title="[抱拳]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[支持]" data-pid="1" data-id="434"><img th:src="@{/images/smile/face62.png}" src="../static/images/images/smile/face62.png" style="width: 24px;height: 24px" title="[支持]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[拥抱]" data-pid="1" data-id="1944"><img th:src="@{/images/smile/face63.png}" src="../static/images/images/smile/face63.png" style="width: 24px;height: 24px" title="[拥抱]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[怪我咯]" data-pid="1" data-id="1946"><img th:src="@{/images/smile/face64.png}" src="../static/images/images/smile/face64.png" style="width: 24px;height: 24px" title="[怪我咯]"></a>
+                                    <a class="emoji-list emoji-text emoji-pic emoji-small" data-emoji-text="[跪了]" data-pid="1" data-id="1945"><img th:src="@{/images/smile/face65.png}" src="../static/images/images/smile/face65.png" style="width: 24px;height: 24px" title="[跪了]"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <!--评论列表-->
+                        <div  th:each="comment,iterStat:${comments}"  class="media text-left text-secondary"  >
+                                <a th:href="@{/user/info/find/}+${comment.UId}" href="#"  target="_blank">
+                                    <img th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${comment.avatar}"  src="images/-200.jpeg" class="mr-3" alt="用户头像">
+                                </a>
+                                <div class="media-body">
+                                    <h6 class="mt-0">
+                                        <i th:if="${comment.authorComment}" class="fa fa-bookmark text-success" aria-hidden="true"></i><span th:text="${comment.nickname}">Media heading</span>&nbsp;&nbsp;<small th:text="${comment.createTime}">2020-04-08 12:08</small>
+                                        <div class="float-right">#<span th:text="${iterStat.size}-${iterStat.index}"></span></div>
+                                    </h6>
+                                    <div th:utext="${comment.content}">
+                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                                    </div>
+                                    <div>
+                                        <a class="text-info" th:data-commentid="${comment.id}" onclick="reply(this)" href="javascript:void(0);">回复</a>
+                                    </div>
+                                    <!--回复-->
+                                    <div  th:if="${#arrays.length(comment.replyComments)>0}"th:each="replay:${comment.replyComments}" class="media">
+                                            <a th:href="@{/user/info/find/}+${replay.UId}"   href="#"  target="_blank">
+                                                <img  th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${replay.avatar}" src="images/-200.jpeg" class="mr-3" alt="用户头像">
+                                            </a>
+                                            <div class="media-body">
+                                                <h6 class="mt-0"><i th:if="${replay.authorComment}" class="fa fa-bookmark text-success" aria-hidden="true"></i><span th:text="${replay.nickname}">Media heading</span>&nbsp;&nbsp;<span class="text-info">@[[${replay.parentComment.nickname}]]</span>&nbsp;&nbsp;<small th:text="${replay.createTime}">2020-04-08 12:08</small></h6>
+                                                <div th:utext="${replay.content}">
+                                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                                                </div>
+                                                <div>
+                                                    <a class="text-info" th:data-commentid="${comment.id}" onclick="reply(this)" href="javascript:void(0);">回复</a>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                            </div>
+
+                    </div>
+                    <!--目录区域-->
+                    <div class="tab-pane fade " id="tab2">
+                        <ul class="list-unstyled text-left mt-3 ">
+                            <li th:each="chapter:${courseDto.chapters}">
+                               <span class="text-muted" th:text="${chapter.name}">第一章 大大所多</span>
+                               <ul class="list-unstyled text-left ">
+                                   <li th:each="video:${chapter.videos}" class="mt-1"><a onclick="playVideo(this)" th:data-url="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080'+${video.url}" style="width: 24px;height: 24px" title="点击播放" class="text-muted" href="javascript:void(0);"><i class="fa fa-play-circle mr-1" aria-hidden="true"></i>[[${video.name}]]</a></li>
+                               </ul>
+                           </li>
+                        </ul>
+                    </div>
+                    <!--课程资料区域-->
+                    <div class="tab-pane fade" id="tab3">
+
+                        <div class="row mt-3">
+                            <div class="col-4">
+                                文件名称
+                            </div>
+                            <div class="col-4">
+                                文件大小
+                            </div>
+                            <div class="col-4">
+                                操作
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div id="dataName" th:text="${courseDto.dataName}" class="col-4">
+                              源码.src
+                            </div>
+                            <div th:text="${courseDto.dataSize}" class="col-4">
+                                1024M
+                            </div>
+                            <div class="col-4" >
+                                <a th:unless="${#strings.isEmpty(courseDto.dataName)}" th:href="@{/course/download(dataName=${courseDto.dataName},dataPath=${courseDto.data},openStyle='attachment')}"  href="#" class="btn btn-primary " style="margin-right: 5px;">
+                                    <i class="fa fa-download" aria-hidden="true"></i>下载
+                                </a>
+                                <a  th:unless="${#strings.isEmpty(courseDto.dataName)}" th:href="@{/course/download(dataName=${courseDto.dataName},dataPath=${courseDto.data},openStyle='inline')}"  href="#" class="btn btn-primary " style="margin-right: 5px;" target="_blank">
+                                    <i class="fa fa-folder-open-o" aria-hidden="true"></i> 在线打开
+                                </a>
+                                <!--<a th:href="@{/course/download(dataName='1.pdf',dataPath='/data/1.pdf',openStyle='attachment')}"  href="#" class="btn btn-primary " style="margin-right: 5px;">-->
+                                    <!--<i class="fa fa-download" aria-hidden="true"></i>下载-->
+                                <!--</a>-->
+                                <!--<a th:href="@{/course/download(dataName='1.pdf',dataPath='/data/1.pdf',openStyle='inline')}"  href="#" class="btn btn-primary " style="margin-right: 5px;">-->
+                                    <!--<i class="fa fa-folder-open-o" aria-hidden="true"></i> 在线打开-->
+                                <!--</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!--/*/<th:block th:replace="_fragments::script">/*/-->
+<script src="../static/js/jquery.min.js"></script>
+<!--<script src="js/bootstrap.min.js"></script>-->
+<script src="../static/js/bootstrap.bundle.min.js"></script>
+<!--/*/</th:block>/*/-->
+<script th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/plugins/videojs/video.js'" src="../static/plugins/videojs/video.js"></script>
+<script th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/plugins/videojs/videojs-contrib-hls.js'" src="../static/plugins/videojs/videojs-contrib-hls.js"></script>
+<script  th:inline="javascript">
+
+
+
+
+    //点击回复 获取要评论的id
+    function reply(obj) {
+        //获取回复的id
+        //data 方法中的属性如果是大写获取不到值 所以用commentid
+        var parentCommentId = $(obj).data('commentid');
+        //设置回复的父评论id
+        $("input[name='parentComment.id']").val(parentCommentId);
+        //获取输入评论的内容的对象,定位光标
+        $("[name='content']").focus();
+    }
+
+
+    //======================================视频播放处理区域==========================
+    //使用 video.js 6.7.3 版本，videojs-contrib-hls 5.14.1版本
+    //videojs全局函数      	video标签id,
+    //      	配置选项(data-setup='{}'),
+    //      	videojs初始化完成回调函数
+    var myPlayer=videojs("example-video");
+    //播放视频
+    function playVideo(obj) {
+        //取出视频播放地址
+        var videoUrl=$(obj).data("url");
+        //设置视频播放地址
+        myPlayer.src([
+            {type:"application/x-mpegURL", src:videoUrl}
+            ]);
+        //播放
+        myPlayer.play();
+    };
+    // 开关灯
+    var flagLight=1;
+    $("#light").click(function () {
+        if(flagLight==1){
+            $("#body").css("backgroundColor","rgba(0, 0, 0, .9)");
+            $("#courseName").css("color","rgb(53, 181, 88)");
+            $("#light p").text("开灯");
+            flagLight=0;
+        }else{
+            $("#body").css("backgroundColor","");
+            $("#courseName").css("color","");
+            $("#light p").text("关灯")
+            flagLight=1;
+        }
+    });
+
+
+    $(function () {
+        //=====================================评论区域开始==================================================
+        //判断用户是否登录，未登录提示去登录
+        //避免循环引用，模板引擎解析不了，不要使用user
+        //获取用户id
+        var uid = /*[[${user?.id}]]*/"";
+        //获取课程id
+        var cid=/*[[${courseDto?.id}]]*/"";
+        //获取作者id
+        var authId=/*[[${courseDto?.userDto?.id}]]*/"";
+
+        //未登录
+        if(uid==null){
+            $(".c-content").prop("contenteditable","false");
+            $(".c-content").html("<div class='m-auto'>请<a href='/loginByQQ'>登录</a>后发表评论(・ω・)</div>");
+            $(".c-content").css("backgroundColor","#e5e9ef");
+        }else{
+            //保存一条评论
+            $('body').on('click','#btn-sub-comment',function () {
+                //获取评论内容
+                var content=$("div[name='content']").html();
+                //
+                $("#tab1").load(/*[[@{/course/comment}]]*/"",{
+                    "parentComment.id":$("[name='parentComment.id']").val(),
+                    "course.id":$("[name='course.id']").val(),
+                    'content':content
+                },function (response,status,xhr) {
+                    //清空评论内容 和 设置父评论的val 为-1
+                    $("div[name='content']").html('');
+                    $("[name='parentComment.id']").val(-1)
+                })
+            });
+
+            //显示和隐藏表情列表区域
+            var flagFace=0;
+            $('body').on('click','#face',function () {
+                if(flagFace==0){
+                    $(".emoji-box").css("display","block");
+                    flagFace=1;
+                }else{
+                    $(".emoji-box").css("display","none");
+                    flagFace=0;
+                }
+            });
+            //点击表情添加到评论区
+            $('body').on('click','.emoji-wrap a',function () {
+                // $(this).children()[0]  得到的是js对象，需要转换为jequery对象  $(js对象)
+                //将点击对象直接克隆一个添加到评论区
+                $(".c-content").append($($(this).children()[0]).clone());
+            });
+            // $(".emoji-wrap a").click(function () {
+            //
+            // });
+        }
+
+        //========================================================点赞、关注、收藏=============================================
+        //点赞
+        $('body').on('click','#like_btn',function (obj) {
+            if (uid != null) {
+                //刷新局部数据
+                $("#like_btn").load(/*[[@{/course/like}]]*/"",{
+                    "userId":uid,
+                    "courseId":cid
+                });
+            } else {
+                //未登录提示去登录
+                alert("请登录后再操作！");
+            }
+        });
+        //关注
+        $('body').on('click','#attention_btn',function () {
+            if(uid!=null){
+                //刷新局部数据
+                $("#attention").load(/*[[@{/course/attention}]]*/"",{
+                    "authId":authId,
+                    "userId":uid,
+                    "courseId":cid
+                });
+            }else{
+                //未登录提示去登录
+                alert("请登录后再操作！");
+            }
+        });
+        //收藏
+        $('body').on('click','#collect_btn',function () {
+            if(uid!=null){
+                //刷新局部数据
+                $("#collect_btn").load(/*[[@{/course/collect}]]*/"",{
+                    "userId":uid,
+                    "courseId":cid
+                });
+            }else{
+                //未登录提示去登录
+                alert("请登录后再操作！");
+            }
+        });
+    });
+</script>
+</html>

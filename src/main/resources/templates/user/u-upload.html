@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="user/_fragments :: head(~{::title})">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+  <title>上传视频</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="../../static/plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../static/dist/css/adminlte.min.css">
+
+  <link rel="stylesheet" href="../../static/css/font-awesome.min.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- 导航栏 -->
+  <nav th:replace="user/_fragments:: navbar" class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="index3.html" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li>
+    </ul>
+
+    <!-- 搜索 -->
+    <form class="form-inline ml-3">
+      <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-navbar" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="../../static/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="../../static/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">I got your message bro</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="../../static/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Nora Silvester
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">The subject goes here</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li>
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button"><i
+            class="fas fa-th-large"></i></a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside th:replace="user/_fragments:: sidebar(7,${user.avatar},${user.nickname})" class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+      <img src="../../static/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text font-weight-light">IT自学网</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="../../static/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">小明</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <!--个人信息-->
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="fa fa-info-circle" aria-hidden="true"></i>
+              <p>
+                个人信息
+                <span class="right badge badge-danger">New</span>
+              </p>
+            </a>
+          </li>
+          <!--我的收藏-->
+          <li class="nav-item">
+            <a href="./u-collect.html" class="nav-link">
+              <i class="fa fa-heart" aria-hidden="true"></i>
+              <p>
+                我的收藏
+              </p>
+            </a>
+          </li>
+          <!--我的关注-->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fa fa-plus-square" aria-hidden="true"></i>
+              <p>
+                我的关注
+              </p>
+            </a>
+          </li>
+          <!--我的私信-->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <p>
+              我的私信
+                <span class="right badge badge-danger">New</span>
+              </p>
+            </a>
+          </li>
+          <!--视频管理-->
+          <li class="nav-item has-treeview ">
+            <a href="#" class="nav-link ">
+              <i class="fa fa-table" aria-hidden="true"></i>
+              <p>
+               视频管理
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>视频列表</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>上传视频</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- 内容区域 -->
+  <div class="content-wrapper">
+    <!--切记不要在下面的div加 card类，否则宽度不固定-->
+    <div class="row">
+      <div class="col-md-12">
+          <div class="card-body">
+            <div class="panel panel-default">
+              操作步骤：<br/>
+              1、点击“选择文件”，选择要上传的文件<br/>
+              2、点击“开始上传”，开始上传文件<br/>
+              3、如需重新上传请重复上边的步骤。<br/>
+              <span class="text-danger">注意：文件最大为1G,目前只支持.avi和.mp4格式文件</span>
+              <br/><br/>
+              <div class="panel-body">
+                <div id="uploader" class="wu-example">
+                  <!--用来存放文件信息-->
+                  <div id="thelist" class="uploader-list"></div>
+                  <div class="btns float-left my-0 mr-3">
+                    <div id="picker" class="d-inline-block">选择文件</div>
+                  </div>
+                  <button id="ctlBtn" class="btn btn-default">开始上传</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <!--内容结束-->
+</div>
+
+
+<!--/*/<th:block th:replace="user/_fragments :: script">/*/-->
+<!-- jQuery -->
+<script src="../../static/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- bs-custom-file-input -->
+<script src="../../static/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../static/dist/js/adminlte.min.js"></script>
+
+<!--/*/</th:block>/*/-->
+<script th:src="${#httpServletRequest.getScheme()}+'://'+${#httpServletRequest.getServerName()}+':8080/static/plugins/webuploader/webuploader.min.js'" src="../../static/plugins/webuploader/webuploader.min.js"></script>
+<script th:inline="javascript" type="application/javascript">
+    /*<![CDATA[*/
+    var $ = jQuery,
+        $list = $('#thelist'),
+        $btn = $('#ctlBtn'),
+        state = 'pending',
+        uploader;
+    var fileMd5;//文件的MD5值
+    var fileName;//文件名称
+    var blockSize = 10 * 1024 * 1024;
+
+    var md5Arr = new Array(); //文件MD5数组
+    var timeArr = new Array();//文件上传时间戳数组
+    //注册钩子方法
+    WebUploader.Uploader.register({
+        "before-send-file": "beforeSendFile",//整个文件上传前
+        "before-send": "beforeSend",//每个分片上传前
+        "after-send-file": "afterSendFile"//分片上传完毕
+    }, {
+
+        //对文件分块之前调用，做一些上传文件前的准备工作，如检查文件目录是否创建
+        //1.生成整个文件的MD5值
+        beforeSendFile:function(file) {
+            // 创建一个deffered,用于通知是否完成操作
+            var deferred = WebUploader.Deferred();
+
+            var index = file.id.slice(8);//文件下标
+            var startTime = new Date();//一个文件上传初始化时，开始计时
+            timeArr[index] = startTime;//将每一个文件初始化时的时间放入时间数组
+
+            // 计算文件的唯一标识，用于断点续传
+            (new WebUploader.Uploader()).md5File(file, 0,blockSize)
+                .progress(function (percentage) {
+                    $('#' + file.id).find('p.state').text('正在读取文件信息...');
+                })
+                .then(function(val) {
+                    $("#" + file.id).find('p.state').text('成功获取文件信息...');
+                    var index = file.id.slice(8);
+
+                    this.fileMd5 = val;
+                    this.uploadFile = file;
+//                alert(this.fileMd5 )
+                    //向服务端请求注册上传文件
+                    $.ajax(
+                        {
+                            type:"POST",
+                            url:"/user/media/register",
+                            data:{
+                                // 文件唯一表示
+                                fileMd5:this.fileMd5,
+                                fileName: file.name,
+                                fileSize:file.size,
+                                mimetype:file.type,
+                                fileExt:file.ext
+                            },
+                            dataType:"json",
+                            success:function(response) {
+                                if(response) {
+
+                                    //alert('上传文件注册成功开始上传');
+                                    deferred.resolve();
+                                } else {
+                                    alert("文件已存在")
+                                    deferred.reject();
+                                }
+                            }
+                        }
+                    );
+                }.bind(this));
+
+            return deferred.promise();
+        }.bind(this),
+        //上传分块前调用前调用此方法，检查分块是否存在
+            beforeSend:function(block) {
+                var deferred = WebUploader.Deferred();
+                // 每次上传分块前校验分块，如果已存在分块则不再上传，达到断点续传的目的
+                $.ajax(
+                    {
+                        type:"POST",
+                        url:"/user/media/checkchunk",
+                        data:{
+                            // 文件唯一表示
+                            fileMd5:this.fileMd5,
+                            // 当前分块下标
+                            chunk:block.chunk,
+                            // 当前分块大小
+                            chunkSize:block.end-block.start
+                        },
+                        dataType:"json",
+                        success:function(response) {
+                            if(response) {
+                                // 分块存在，跳过该分块
+                                deferred.reject();
+                            } else {
+                                // 分块不存在或不完整，重新发送
+                                deferred.resolve();
+                            }
+                        }
+                    }
+                );
+                //构建fileMd5参数，上传分块时带上fileMd5
+                this.uploader.options.formData.fileMd5 = this.fileMd5;
+                this.uploader.options.formData.chunk = block.chunk;
+                return deferred.promise();
+            }.bind(this),
+            afterSendFile:function(file) {
+                $('#' + file.id).find('p.state').text('已上传');
+                // 合并分块
+                $.ajax(
+                    {
+                        type:"POST",
+                        url:"/user/media/mergechunks",
+                        data:{
+                            fileMd5:this.fileMd5,
+                            fileName: file.name,
+                            fileSize:file.size,
+                            mimetype:file.type,
+                            fileExt:file.ext
+                        },
+                        success:function(response){
+                            //在这里解析合并成功结果
+                        }
+                    }
+                );
+            }.bind(this)
+        }
+    );
+
+    // 创建uploader对象，配置参数
+    uploader = WebUploader.create({
+        // swf文件路径 上传文件的flash文件，浏览器不支持h5时启动flash
+        swf: '@{../../js/Uploader.swf}',
+        // 文件接收服务端。
+        server: /*[[@{/user/media/uploadchunk}]]*/"",
+        fileVal:"file",//文件上传域的name
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#picker',
+        auto:false,//手动触发上传
+        disableGlobalDnd:true,//禁掉整个页面的拖拽功能
+        chunked: true, //分片处理
+        chunkSize: 5 * 1024 * 1024, //每片大小(默认5M)
+        threads: 3,// 开启多个线程（默认3个）。
+        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+        resize: false,
+        prepareNextFile:true// 允许在文件传输时提前把下一个文件准备好
+    });
+    // 当有文件被添加进队列的时候
+    uploader.on('fileQueued', function (file) {
+        //文件列表添加文件页面样式
+        $list.append('<div id="' + file.id + '" class="item">' +
+            '<div class="row">\n' +
+            '<div class="col-md-11"><h5 class="info">' + file.name + '</h5></div>\n' +
+            '<div class="col-md-1"><button class="btn btn-info delbtn" onclick="delFile(\'' + file.id + '\')">删除</button></div>\n' +
+            '</div>\n' +
+            '<div class="row">\n' +
+            '<div class="col-md-5"><p class="state">等待上传...</p></div>\n' +
+            '<div class="col-md-7"><span class="time"></span></div>\n' +
+            '</div>');
+    });
+    // 文件上传过程中创建进度条实时显示
+    uploader.on('uploadProgress', function (file, percentage) {
+        //计算每个分块上传完后还需多少时间
+        var index = file.id.slice(8);//文件的下标
+        var currentTime = new Date();
+        var timeDiff = currentTime.getTime() - timeArr[index].getTime();//获取已用多少时间
+        var timeStr;
+        //如果percentage==1说明已经全部上传完毕，则需更改页面显示
+        if (1 == percentage) {
+            timeStr = "上传用时：" + countTime(timeDiff);//计算总用时
+        } else {
+            timeStr = "预计剩余时间：" + countTime(timeDiff / percentage * (1 - percentage));//估算剩余用时
+        }
+        //创建进度条
+        var $li = $('#' + file.id), $percent = $li.find('.progress .progress-bar');
+        // 避免重复创建
+        if (!$percent.length) {
+            $percent = $(
+                '<div class="progress">'
+                + '<div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%">'
+                + '</div>' + '</div>')
+                .appendTo($li).find('.progress-bar');
+        }
+        $li.find('p.state').text('上传中');
+        $li.find('span.time').text(timeStr);
+        $percent.css('width', percentage * 100 + '%');
+    });
+    /*    uploader.on('uploadSuccess', function (file) {
+            var index = file.id.slice(8);
+            $('#' + file.id).find('p.state').text('已上传');
+            $.post(/!*[[@{/upload/combine}]]*!/, {
+                "guid": md5Arr[index],
+                fileName: file.name,
+            }, function () {
+                uploader.removeFile(file);
+            }, "json");
+        });*/
+
+    //上传失败时
+    uploader.on('uploadError', function (file) {
+        $('#' + file.id).find('p.state').text('检查网络或文件已经存在');
+    });
+    //上传完成时
+    uploader.on('uploadComplete', function (file) {
+        $('#' + file.id).find('.progress').fadeOut();
+    });
+    //上传状态
+    uploader.on('all', function (type) {
+        if (type === 'startUpload') {
+            state = 'uploading';
+        } else if (type === 'stopUpload') {
+            state = 'paused';
+        } else if (type === 'uploadFinished') {
+            state = 'done';
+        }
+        if (state === 'uploading') {
+            $btn.text('暂停上传');
+        } else {
+            $btn.text('开始上传');
+        }
+    });
+    //开始上传，暂停上传的函数
+    $btn.on('click', function () {
+        //每个文件的删除按钮不可用
+        $(".delbtn").attr("disabled", true);
+        if (state === 'uploading') {
+            uploader.stop(true);//暂停
+            //删除按钮可用
+            $(".delbtn").removeAttr("disabled");
+        } else {
+            uploader.upload();
+        }
+    });
+    //删除文件
+    function delFile(id) {
+        //将文件从uploader的文件列表中删除
+        uploader.removeFile(uploader.getFile(id, true));
+        //清除页面元素
+        $("#" + id).remove();
+    }
+    //获取上传时还需多少时间
+    function countTime(date) {
+        var str = "";
+        //计算出相差天数
+        var days = Math.floor(date / (24 * 3600 * 1000))
+        if (days > 0) {
+            str += days + " 天 ";
+        }
+        //计算出小时数
+        var leave1 = date % (24 * 3600 * 1000) //计算天数后剩余的毫秒数
+        var hours = Math.floor(leave1 / (3600 * 1000))
+        if (hours > 0) {
+            str += hours + " 小时 ";
+        }
+        //计算相差分钟数
+        var leave2 = leave1 % (3600 * 1000) //计算小时数后剩余的毫秒数
+        var minutes = Math.floor(leave2 / (60 * 1000))
+        if (minutes > 0) {
+            str += minutes + " 分 ";
+        }
+        //计算相差秒数
+        var leave3 = leave2 % (60 * 1000) //计算分钟数后剩余的毫秒数
+        var seconds = Math.round(leave3 / 1000)
+        if (seconds > 0) {
+            str += seconds + " 秒 ";
+        } else {
+            /* str += parseInt(date) + " 毫秒"; */
+            str += " < 1 秒";
+        }
+        return str;
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

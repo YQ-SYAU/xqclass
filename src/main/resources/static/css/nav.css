@@ -1,0 +1,36 @@
+a {
+    text-decoration: none!important;
+}
+/*导航栏右侧*/
+.nav-right{
+    float: right;
+    position: relative;
+    width: 400px;
+    margin-right: 102px;
+}
+.search {
+    float: left;
+}
+
+a:hover.loginA {
+    color: white;
+}
+
+.login {
+    float: right;
+}
+.loginA{
+    color: white;
+}
+.loginA img{
+    height: 38px;
+    width: 38px;
+}
+.login ul li {
+    float: right;
+}
+/*用户头像显示的菜单*/
+.uImage {
+    height: 36px;
+    width: 36px;
+}
